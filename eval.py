@@ -1,3 +1,4 @@
+from pickletools import uint8
 from data import COCODetection, get_label_map, MEANS, COLORS
 from yolact import Yolact
 from utils.augmentations import BaseTransform, FastBaseTransform, Resize
@@ -164,6 +165,26 @@ def prep_display(dets_out, img, h, w, undo_transform=True, class_color=False, ma
         if scores[j] < args.score_threshold:
             num_dets_to_consider = j
             break
+        
+    np.save('mask_data', masks.cpu().numpy()[:num_dets_to_consider])
+    np.save('bbox_data', boxes[:num_dets_to_consider])
+    np.save('class_data', classes[:num_dets_to_consider])
+    mask = np.load('./mask_data.npy')
+
+    mask = masks.cpu().numpy()
+    for j in range(num_dets_to_consider):
+        print(cfg.dataset.class_names[classes[j]], ":", classes[j])
+    for j in range(num_dets_to_consider):
+        if cfg.dataset.class_names[classes[j]] == 'person':
+            solutions = np.argwhere(mask[j] != 0)
+            if classes[j] == 0:
+                print(mask[j])
+                cv2.imwrite('test.png', mask[j]*255)
+            # print(solutions)
+            black = np.zeros((384, 640), dtype=int)
+            for px in solutions:
+                black[px[0]][px[1]] = 255.0
+            cv2.imwrite('mask_data.png', black)
 
     # Quick and dirty lambda for selecting the color for a particular index
     # Also keeps track of a per-gpu color cache for maximum speed
