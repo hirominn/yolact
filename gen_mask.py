@@ -71,7 +71,7 @@ def acquire_mask(dets_out, img, h, w, undo_transform=True, class_color=False, ma
             break
     # stop = time.perf_counter()
     # print("-- -- Acquiring Duration:", (stop - start) * 1000, "ms")
-    return [masks.cpu().numpy()[:num_dets_to_consider], boxes[:num_dets_to_consider], classes[:num_dets_to_consider]]
+    return masks.cpu().numpy()[:num_dets_to_consider], boxes[:num_dets_to_consider], classes[:num_dets_to_consider]
 
 
 def evalimage(net:Yolact, image):
