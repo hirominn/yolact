@@ -115,6 +115,9 @@ def gen_mask(net, image):
 
         return evaluate(net, image)
 
+def get_class_names():
+    return cfg.dataset.class_names
+
 if __name__ == '__main__':
     image = cv2.imread('data/yolact_example_0.png')
     trained_model='weights/yolact_plus_resnet50_54_800000.pth'
