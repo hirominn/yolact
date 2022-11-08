@@ -32,6 +32,7 @@ import cv2
 
 
 def acquire_mask(dets_out, img, h, w, undo_transform=True, class_color=False, mask_alpha=0.45, fps_str=''):
+    global score_threshold
     score_threshold = 0.15
     top_k = 15
 
@@ -106,7 +107,9 @@ def prepare_net(trained_model):
 
     return net
 
-def gen_mask(net, image):
+def gen_mask(net, image, threshold):
+    global score_threshold
+    score_threshold = threshold
     with torch.no_grad():
         if not os.path.exists('results'):
             os.makedirs('results')
@@ -127,6 +130,6 @@ if __name__ == '__main__':
 
     for i in range(20):
         # start = time.perf_counter()
-        gen_mask(net, image)
+        gen_mask(net, image, 0.15)
         # stop = time.perf_counter()
         # print("Generating Duration:", (stop - start) * 1000, "ms")
