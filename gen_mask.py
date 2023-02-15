@@ -33,7 +33,6 @@ import cv2
 
 def acquire_mask(dets_out, img, h, w, undo_transform=True, class_color=False, mask_alpha=0.45, fps_str=''):
     global score_threshold
-    score_threshold = 0.15
     top_k = 15
 
     # start = time.perf_counter()
